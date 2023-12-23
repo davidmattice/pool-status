@@ -7,4 +7,4 @@ With special thanks to the developers of [screenlogic.py](https://github.com/die
 
 Building and Running
 - docker build --tag pool-status .
-- docker stop pool-status;docker rm pool-status;docker run -d -p 5001:5001 --name pool-status pool-status
+- docker stop pool-status;docker rm pool-status;docker run -d -p 5005:5000 --name pool-status pool-status

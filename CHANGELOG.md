@@ -7,3 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [v0.1.0] - 2023-12-19
 - Initial release
+
+## [v0.2.0] - 2023-12-19
+- Updated to screenlogicpy 0.10.0
+- updated to python 3.12

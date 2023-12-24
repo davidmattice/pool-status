@@ -1,13 +1,10 @@
 import asyncio
-import string
-import json
-import argparse
-import sys
-import pprint
-import time
 import os
-from flask import Flask, render_template, request, url_for, flash, redirect
+from flask import Flask, render_template
+
 from screenlogicpy import ScreenLogicGateway, discovery
+from screenlogicpy.discovery import async_discover
+from screenlogicpy.const.common import (ScreenLogicException)
 
 gateway = None
 
@@ -17,26 +14,30 @@ app = Flask(__name__)
 async def index():
   global gateway
   ip = None
-  success = None
-
+  hosts = None
   msg = "No IP set"
+
   ip = os.getenv("IP_ADDR")
   if ip != None:
 
     hosts = [{"ip": ip, "port": "80"}]
-#    hosts = await discovery.async_discover()
+#    hosts = await async_discover()       # Can't get this to work
     msg = hosts
 
-    success = await gateway.async_connect(**hosts[0])
-    if success:
-      msg = "Connected!"
-      success = await gateway.async_update()  
-      if success:
+    if len(hosts) > 0:
+      try:
+        await gateway.async_connect(**hosts[0])
+        await gateway.async_update()  
+        await gateway.async_disconnect()
         msg = gateway.get_data()
-        success = await gateway.async_disconnect()
+
+      except ScreenLogicException as err:
+        msg = err
 
   return render_template('index.html', msg=msg)
 
+
+  
 
 if __name__ == "app":
   gateway = ScreenLogicGateway()
